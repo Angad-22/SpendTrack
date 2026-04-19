@@ -2,10 +2,7 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-
-# ------------------------------------------------------------------ #
-# Routes                                                              #
-# ------------------------------------------------------------------ #
+# Routes
 
 @app.route("/")
 def landing():
@@ -20,7 +17,6 @@ def register():
 @app.route("/login")
 def login():
     return render_template("login.html")
-
 
 # ------------------------------------------------------------------ #
 # Placeholder routes — students will implement these                  #
