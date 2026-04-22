@@ -259,3 +259,8 @@
     .dash-stats { grid-template-columns: 1fr; }
     .dash-bar-row { grid-template-columns: 65px 1fr; }
 }
+
+@media (max-width: 600px) {
+    .video-modal { padding: 1rem; }
+    .video-modal-close { top: -2.5rem; font-size: 2rem; }
+}
