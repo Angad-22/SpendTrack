@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Profile — SpendTrack{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="profile-page">
+
+        <!-- Greeting -->
+        <div class="profile-greeting">
+            <h1 class="profile-greeting-name">Hello, {{ user.name.split()[0] }}</h1>
+            <p class="profile-greeting-sub">Here's your spending overview.</p>
+        </div>
+
+        <div class="profile-grid">
+
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+
+                <!-- User info card -->
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        {{ user.name.split()|map('first')|join|upper }}
+                    </div>
+                    <span class="profile-name">{{ user.name }}</span>
+                    <span class="profile-email">{{ user.email }}</span>
+                    <hr class="profile-divider">
+                    <span class="profile-since">Member since {{ user.member_since }}</span>
+                </div>
+
+                <!-- Category breakdown -->
+                <div class="table-card">
+                    <h2 class="profile-section-title">By Category</h2>
+                    <div class="breakdown-list">
+                        {% for cat in categories %}
+                        <div class="breakdown-row">
+                            <div class="breakdown-row-header">
+                                <span class="breakdown-label">{{ cat.name }}</span>
+                                <span class="breakdown-amount">{{ cat.amount }}</span>
+                            </div>
+                            <div class="breakdown-bar-track">
+                                <div class="breakdown-bar-fill breakdown-fill-{{ cat.name|lower }}" style="width: {{ cat.pct }}%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Main column -->
+            <div class="profile-main">
+
+                <!-- Stats -->
+                <div class="stats-row">
+                    <div class="stat-tile">
+                        <span class="stat-icon">₹</span>
+                        <span class="stat-value">{{ stats.total_spent }}</span>
+                        <span class="stat-label">Total Spent</span>
+                    </div>
+                    <div class="stat-tile">
+                        <span class="stat-icon">◎</span>
+                        <span class="stat-value">{{ stats.transaction_count }}</span>
+                        <span class="stat-label">Transactions</span>
+                    </div>
+                    <div class="stat-tile">
+                        <span class="stat-icon">◈</span>
+                        <span class="stat-value">{{ stats.top_category }}</span>
+                        <span class="stat-label">Top Category</span>
+                    </div>
+                </div>
+
+                <!-- Transaction history -->
+                <div class="table-card">
+                    <h2 class="profile-section-title">Transaction History</h2>
+                    <table class="expense-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th class="col-desc">Description</th>
+                                <th>Category</th>
+                                <th class="col-amount">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in transactions %}
+                            <tr>
+                                <td class="col-date">{{ row.date }}</td>
+                                <td>{{ row.description }}</td>
+                                <td>
+                                    <span class="category-badge badge-{{ row.category|lower }}">
+                                        {{ row.category }}
+                                    </span>
+                                </td>
+                                <td class="col-amount col-amount-value">{{ row.amount }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="empty-state">No expenses yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
