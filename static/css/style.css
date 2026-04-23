@@ -422,6 +422,26 @@ a { color: inherit; text-decoration: none; }
     margin-bottom: 1.25rem;
 }
 
+.login-success-banner {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--success-light);
+    color: var(--success);
+    border: 1px solid #b6dfc4;
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1.25rem;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    z-index: 999;
+}
+
+.login-success-banner.fade-out {
+    opacity: 0;
+}
+
 .auth-success {
     background: var(--success-light);
     color: var(--success);
