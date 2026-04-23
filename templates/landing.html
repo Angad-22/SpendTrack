@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Spendly — Track Every Rupee{% endblock %}
+{% block title %}SpendTrack — Track Every Rupee{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
 {% endblock %}
 
 {% block content %}
+
+{% if request.args.get('login') %}
+<div class="login-success-banner" id="login-toast">You're signed in — welcome back!</div>
+{% endif %}
 
 <section class="hero">
     <div class="hero-inner">
@@ -19,7 +23,7 @@
             <em>Know where it goes.</em>
         </h1>
         <p class="hero-subtitle">
-            Spendly helps you log expenses, spot patterns, and stay
+            SpendTrack helps you log expenses, spot patterns, and stay
             on budget — without the spreadsheet headache.
         </p>
         <div class="hero-actions">
@@ -97,19 +101,19 @@
 <section class="cta-section">
     <div class="cta-inner">
         <h2 class="cta-title">Ready to take control?</h2>
-        <p class="cta-body">Join thousands of people who track their expenses with Spendly.</p>
+        <p class="cta-body">Join thousands of people who track their expenses with SpendTrack.</p>
         <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
     </div>
 </section>
 
 <div class="video-modal" id="video-modal" hidden>
-    <div class="video-modal-dialog" role="dialog" aria-modal="true" aria-label="How Spendly works">
+    <div class="video-modal-dialog" role="dialog" aria-modal="true" aria-label="How SpendTrack works">
         <button type="button" class="video-modal-close" id="video-modal-close" aria-label="Close">&times;</button>
         <div class="video-modal-frame">
             <iframe id="video-modal-iframe"
                     data-src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&autoplay=1"
                     src=""
-                    title="How Spendly works"
+                    title="How SpendTrack works"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
@@ -121,6 +125,16 @@
 
 {% block scripts %}
 <script>
+(function () {
+    var toast = document.getElementById('login-toast');
+    if (toast) {
+        setTimeout(function () {
+            toast.classList.add('fade-out');
+            setTimeout(function () { toast.remove(); }, 500);
+        }, 3000);
+    }
+})();
+
 (function () {
     var trigger = document.getElementById('see-how-it-works');
     var modal = document.getElementById('video-modal');
