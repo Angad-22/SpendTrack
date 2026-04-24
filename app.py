@@ -3,6 +3,12 @@ import sqlite3
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from database.db import get_db, init_db, seed_db
+from database.queries import (
+    get_category_breakdown,
+    get_recent_transactions,
+    get_summary_stats,
+    get_user_by_id,
+)
 
 app = Flask(__name__)
 app.secret_key = "dev-secret-change-in-prod"
@@ -98,38 +104,23 @@ def profile():
     if not session.get("user_id"):
         return redirect(url_for("login"))
 
-    user = {
-        "name": "Priya Sharma",
-        "email": "priya@example.com",
-        "member_since": "April 2025",
-    }
+    user_id = session["user_id"]
 
-    stats = {
-        "total_spent": "₹8,600.00",
-        "transaction_count": 8,
-        "top_category": "Bills",
-    }
+    # ── USER INFO ─────────────────────────────────────────────────────────────
+    user = get_user_by_id(user_id)
+    # ── END USER INFO ─────────────────────────────────────────────────────────
 
-    transactions = [
-        {"date": "20 Apr 2025", "description": "Groceries",        "category": "Food",          "amount": "₹380.00"},
-        {"date": "18 Apr 2025", "description": "Misc",             "category": "Other",         "amount": "₹300.00"},
-        {"date": "15 Apr 2025", "description": "New shoes",        "category": "Shopping",      "amount": "₹1,500.00"},
-        {"date": "12 Apr 2025", "description": "Movie tickets",    "category": "Entertainment", "amount": "₹650.00"},
-        {"date": "10 Apr 2025", "description": "Pharmacy",         "category": "Health",        "amount": "₹800.00"},
-        {"date": "07 Apr 2025", "description": "Electricity bill", "category": "Bills",         "amount": "₹2,400.00"},
-        {"date": "05 Apr 2025", "description": "Auto rickshaw",    "category": "Transport",     "amount": "₹120.00"},
-        {"date": "03 Apr 2025", "description": "Lunch with team",  "category": "Food",          "amount": "₹450.00"},
-    ]
+    # ── SUMMARY STATS ─────────────────────────────────────────────────────────
+    stats = get_summary_stats(user_id)
+    # ── END SUMMARY STATS ─────────────────────────────────────────────────────
 
-    categories = [
-        {"name": "Bills",         "amount": "₹2,400.00", "pct": 28},
-        {"name": "Shopping",      "amount": "₹1,500.00", "pct": 17},
-        {"name": "Food",          "amount": "₹830.00",   "pct": 10},
-        {"name": "Health",        "amount": "₹800.00",   "pct":  9},
-        {"name": "Entertainment", "amount": "₹650.00",   "pct":  8},
-        {"name": "Other",         "amount": "₹300.00",   "pct":  3},
-        {"name": "Transport",     "amount": "₹120.00",   "pct":  1},
-    ]
+    # ── TRANSACTION HISTORY ───────────────────────────────────────────────────
+    transactions = get_recent_transactions(user_id)
+    # ── END TRANSACTION HISTORY ───────────────────────────────────────────────
+
+    # ── CATEGORY BREAKDOWN ────────────────────────────────────────────────────
+    categories = get_category_breakdown(user_id)
+    # ── END CATEGORY BREAKDOWN ────────────────────────────────────────────────
 
     return render_template("profile.html", user=user, stats=stats, transactions=transactions, categories=categories)
 
